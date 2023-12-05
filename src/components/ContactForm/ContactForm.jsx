@@ -1,48 +1,41 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from 'nanoid';
+
 import Notiflix from 'notiflix';
 
-import { addContact } from 'redux/contacts/contacts.reducer';
 import css from 'components/ContactForm/ContactForm.module.css';
-import { Loader } from 'components/Loader/Loader';
-import {
-  selectContacts,
-  selectIsLoading,
-} from 'redux/contacts/contacts.selectors';
+import { selectContacts } from 'redux/contacts/contacts.selectors';
+import { addContact } from 'redux/contacts/operations';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-
   const contacts = useSelector(selectContacts);
-  const isLoading = useSelector(selectIsLoading);
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [number, setNumber] = useState('');
 
   const onFormSubmit = e => {
     e.preventDefault();
 
     const newUser = {
-      id: nanoid(),
-      name: name,
-      phone: Number.parseFloat(phone),
+      name,
+      number,
     };
 
     const hasDuplicates = contacts.some(
       item =>
         item.name.toLowerCase() === newUser.name.toLowerCase() ||
-        item.phone === newUser.phone
+        item.number === newUser.number
     );
 
     if (hasDuplicates) {
       Notiflix.Notify.failure(`A contact with the name: '${newUser.name}' and 
-      number: '${newUser.phone}' is already in the list!`);
+      number: '${newUser.number}' is already in the list!`);
       return;
     }
     dispatch(addContact(newUser));
 
     setName('');
-    setPhone('');
+    setNumber('');
   };
 
   const onChangeInput = e => {
@@ -55,7 +48,7 @@ export const ContactForm = () => {
         return;
 
       case 'number':
-        setPhone(value);
+        setNumber(value);
         return;
 
       default:
@@ -65,7 +58,6 @@ export const ContactForm = () => {
 
   return (
     <div>
-      {isLoading && <Loader />}
       <form className={css.form} onSubmit={onFormSubmit}>
         <label className={css.labelForm}>Name</label>
         <input
@@ -85,7 +77,7 @@ export const ContactForm = () => {
           placeholder="Your number"
           pattern="^\+?\d{1,4}[ .\-]?\(?\d{1,3}\)?[ .\-]?\d{1,4}[ .\-]?\d{1,4}[ .\-]?\d{1,9}$"
           className={css.inputForm}
-          value={phone}
+          value={number}
           onChange={onChangeInput}
         />
         <button type="submit" className={css.button}>

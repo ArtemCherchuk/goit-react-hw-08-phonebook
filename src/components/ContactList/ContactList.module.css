@@ -10,11 +10,28 @@
 
 .listItem {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  column-gap: 20px;
 
   font-size: 18px;
+}
+
+.text {
+  display: flex;
+}
+
+.textNumber {
+  width: 120px;
+}
+
+.textName {
+  width: 100px;
+  max-width: 120px;
+}
+
+.buttons {
+  margin-left: auto;
+  display: flex;
+  column-gap: 8px;
 }
 
 .button {

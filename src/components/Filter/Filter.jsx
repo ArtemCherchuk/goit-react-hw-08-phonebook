@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import css from 'components/Filter/Filter.module.css';
 import { filterValue } from 'redux/contacts/contacts.reducer';
-import { selectFilter } from 'redux/contacts/contacts.selectors';
+import { selectContactsFilter } from 'redux/contacts/contacts.selectors';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(selectFilter);
+  const filter = useSelector(selectContactsFilter);
 
   const onChangeInput = e => {
     const value = e.target.value;

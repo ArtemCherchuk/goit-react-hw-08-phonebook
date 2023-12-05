@@ -1,43 +1,5 @@
-import axios from 'axios';
-const { createSlice, createAsyncThunk, isAnyOf } = require('@reduxjs/toolkit');
-
-const BASE_URL = 'https://655cd35125b76d9884fe02fd.mockapi.io/contacts/';
-
-export const fetchContacts = createAsyncThunk(
-  'contacts/getAll',
-  async (_, thunkApi) => {
-    try {
-      const { data } = await axios.get(`${BASE_URL}`);
-      return data;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err.message);
-    }
-  }
-);
-
-export const addContact = createAsyncThunk(
-  'contacts/addContact',
-  async (user, thunkApi) => {
-    try {
-      const response = await axios.post(`${BASE_URL}`, user);
-      return response.data;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err.message);
-    }
-  }
-);
-
-export const deleteContact = createAsyncThunk(
-  'tasks/deleteContact',
-  async (id, thunkAPI) => {
-    try {
-      const response = await axios.delete(`${BASE_URL}${id}`);
-      return response.data;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
+import { addContact, deleteContact, fetchContacts } from './operations';
+const { createSlice, isAnyOf } = require('@reduxjs/toolkit');
 
 const initialState = {
   contacts: {
@@ -72,6 +34,7 @@ const contactcSlice = createSlice({
           contact => contact.id !== payload.id
         );
       })
+
       .addMatcher(
         isAnyOf(
           fetchContacts.pending,
